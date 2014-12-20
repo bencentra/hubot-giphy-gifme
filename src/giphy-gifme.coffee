@@ -32,41 +32,41 @@ sfw_limit = 2
 
 getRandomGiphyGif = (msg, tags) ->
   url = 'http://api.giphy.com/v1/gifs/random?api_key='+api_key
-  if tags && tags[0] != ''
+  if tags and tags[0] != ''
     url += '&tag=' + tags[0]
     for i in [1...tags.length]
       url += ('+' + tags[i]) if tags[i].length > 0
   msg.http(url).get() (err, res, body) ->
     response = JSON.parse(body);
     if sfw_guard
-      if response.data.rating && giphy_ratings[response.data.rating] <= sfw_limit
+      if response.data.rating and giphy_ratings[response.data.rating] <= sfw_limit
         msg.send(response.data.image_url)
       else
-        msg.send("SFW guard activated. You're welcome.")
+        msg.send('SFW guard activated, gif blocked. You\'re welcome.')
     else
       msg.send(response.data.image_url)
 
 setSFWGuardLimit = (msg, limit) ->
   if limit < giphy_ratings['y']
-    msg.send("Invalid limit, setting to 0")
+    msg.send('Invalid limit, setting to 0')
     sfw_limit = giphy_ratings['y']
   else if limit > giphy_ratings['r']
-    msg.send("Invalid limit, setting to 4")
+    msg.send('Invalid limit, setting to 4')
     sfw_limit = giphy_ratings['r']
   else
     sfw_limit = limit
-  msg.send("SFW guard limit set to " + sfw_limit)
+  msg.send('SFW guard limit set to ' + sfw_limit)
 
 getSFWGuardLimit = (msg) ->
-  msg.send("SFW guard limit set to " + sfw_limit)
+  msg.send('SFW guard limit set to ' + sfw_limit)
 
 setSFWGuardStatus = (msg, value) ->
   sfw_guard = value
   getSFWGuardStatus(msg)
 
 getSFWGuardStatus = (msg) ->
-  status = if sfw_guard then "enabled" else "disabled"
-  msg.send("SFW guard is " + status)
+  status = if sfw_guard then 'enabled' else 'disabled'
+  msg.send('SFW guard is ' + status)
 
 module.exports = (robot) ->
   robot.respond /gif me(.*)/i, (msg) ->

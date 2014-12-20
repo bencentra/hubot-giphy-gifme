@@ -2,6 +2,8 @@
 
 "gif me" command for Hubot, get random GIFs from Giphy!
 
+Uses the [Giphy API](https://github.com/giphy/GiphyAPI).
+
 ## Directory Structure
 
 Using the common directory structure for hubot script packages it will be easy
