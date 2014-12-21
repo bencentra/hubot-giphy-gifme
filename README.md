@@ -25,7 +25,7 @@ package.json:
   ...,
   dependencies: {
     ...
-    "hubot-giphy-gifme": "0.1.0" # or whatever version
+    "hubot-giphy-gifme": "0.1.1" # or whatever version
   }
 }
 ```
