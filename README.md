@@ -1,8 +1,6 @@
 # Hubot Example
 
-"gif me" command for Hubot, get random GIFs from Giphy! Available as a package on npm: https://www.npmjs.com/package/hubot-giphy-gifme
-
-Uses the [Giphy API](https://github.com/giphy/GiphyAPI).
+"gif me" command for Hubot, get random GIFs from Giphy! Available as a package on npm: https://www.npmjs.com/package/hubot-giphy-gifme. Uses the [Giphy API](https://github.com/giphy/GiphyAPI).
 
 ## Installation
 
@@ -12,7 +10,7 @@ external-scripts.json:
 
 ```json
 [
-  ...,
+  ...
   "hubot-giphy-gifme"
 ]
 
@@ -22,10 +20,10 @@ package.json:
 
 ```json
 {
-  ...,
+  ...
   dependencies: {
     ...
-    "hubot-giphy-gifme": "0.1.1" # or whatever version
+    "hubot-giphy-gifme": "0.1.2"
   }
 }
 ```

@@ -5,7 +5,7 @@
 # none
 #
 # Configuration:
-# none
+# process.env.HUBOT_GIPHY_API_KEY = <your giphy API key>
 #
 # Commands:
 # hubot gif me (tag 1, tag 2) - Get a random gif (tagged with "tag 1" and "tag 2")
@@ -18,7 +18,7 @@
 # Author:
 # Ben Centra
 
-api_key = 'dc6zaTOxFJmzC' # <== Giphy's public API key, please request your own!
+api_key = process.env.HUBOT_GIPHY_API_KEY or 'dc6zaTOxFJmzC' # <== Giphy's public API key, please request your own!
 
 giphy_ratings = { 
   'y': 0,
