@@ -6,6 +6,7 @@
 #
 # Configuration:
 # process.env.HUBOT_GIPHY_API_KEY = <your giphy API key>
+# process.env.HUBOT_GIPHY_RATING = 'pg' (y,g, pg, pg-13 or r)
 #
 # Commands:
 # hubot gif me (tag 1, tag 2) - Get a random gif (tagged with "tag 1" and "tag 2")
@@ -14,9 +15,10 @@
 # Ben Centra
 
 api_key = process.env.HUBOT_GIPHY_API_KEY or 'dc6zaTOxFJmzC' # <== Giphy's public API key, please request your own!
+rating_limit = process.env.HUBOT_GIPHY_RATING or 'pg'
 
 getRandomGiphyGif = (msg, tags) ->
-  url = 'http://api.giphy.com/v1/gifs/random?api_key='+api_key
+  url = "http://api.giphy.com/v1/gifs/random?api_key=#{api_key}&rating=#{rating_limit}"
   if tags and tags[0] != ''
     url += '&tag=' + tags[0]
     for i in [1...tags.length]
