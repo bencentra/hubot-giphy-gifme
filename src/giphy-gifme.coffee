@@ -18,7 +18,7 @@
 # Ben Centra
 
 # Key for Giphy API
-# Default value is the demo key; please request your own!
+# Default value is the demo key; please request your own here: http://api.giphy.com/submit
 GIPHY_API_KEY = process.env.HUBOT_GIPHY_API_KEY or 'dc6zaTOxFJmzC'
 
 # Content rating to prevent NSFW responses
@@ -63,14 +63,16 @@ getRandomGif = (msg, tags) ->
     if response.image_url
      msg.send response.image_url
     else
-      searchedWithTags = msg.match.length is 1
-      if searchedWithTags
-        msg.send "Apologies -- I couldn't find any GIFs! This is very strange, indeed."
+      if tags
+        msg.send "Apologies -- I couldn't find any GIFs matching '#{tags}'."
       else
-        msg.send "Apologies -- I couldn't find any GIFs matching '#{msg.match[1]}'."
+        msg.send "Apologies -- I couldn't find any GIFs! This is very strange, indeed."
 
 # Commands to expose to Hubot
 module.exports = (robot) ->
-  robot.respond /gif me(.*)|giphy(.*)/i, (msg) ->
-    tags = msg.match[1]
+  robot.respond /(gif me|giphy)(.*)/i, (msg) ->
+    command = msg.match[1]
+    _debug 'command', command
+    tags = msg.match[2]
+    _debug 'tags', tags
     getRandomGif msg, tags

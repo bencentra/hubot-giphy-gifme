@@ -1,59 +1,69 @@
-# Hubot Example
+# hubot-giphy-gifme
 
-"gif me" command for Hubot, get random GIFs from Giphy! Available as a package on npm: https://www.npmjs.com/package/hubot-giphy-gifme. Uses the [Giphy API](https://github.com/giphy/GiphyAPI).
+Get a random GIF from Giphy! Search by tags! Yeah!
 
-## Installation
+Built with the wonderful [Giphy API](https://github.com/Giphy/GiphyAPI).
 
-In your hubot instance, include this script in the following files:
+## Commands
+
+* `hubot gif me` or `hubot giphy` returns a random GIF
+* `hubot gif me american psycho` or `hubot giphy american psycho` returns a GIF tagged with "american" and "psycho"
+
+You can include tags in a number of ways:
+* Space delimited: `hubot gif me american psycho`
+* Comma separated: `hubot gif me american, psycho`
+* Quoted: `hubot gif me "american psycho"`
+
+These will all result in the same search `"american+psycho"`. See the [random endpoint docs](https://github.com/Giphy/GiphyAPI#random-endpoint) for more info.
+
+## Usage
+
+In your hubot instance, include this script like so:
 
 external-scripts.json:
-
 ```json
 [
   ...
   "hubot-giphy-gifme"
 ]
-
 ```
 
-package.json:
-
+package.json
 ```json
 {
   ...
   dependencies: {
     ...
-    "hubot-giphy-gifme": "0.1.2"
+    "hubot-giphy-gifme": "^1.0.0"
   }
 }
 ```
 
-## Directory Structure
+You can configure the script with the following environment variables:
+* `HUBOT_GIPHY_API_KEY` - Your Giphy API key. Uses Giphy's demo API key as a default. You can request your own [here](http://api.giphy.com/submit).
+* `HUBOT_GIPHY_RATING` - The maximum allowed GIF rating (to prevent NSFW results). Possible values are: y, g, pg, pg-13 or r. Defaults to pg.
 
-Using the common directory structure for hubot script packages it will be easy
-to manage and allow others to easily contribute to your package.
+## Contributing
 
-### script
+* Fork/clone this project and make your changes
+* Test against a local hubot instance (see below)
+* Submit a PR and badger [bencentra]() until it is merged and a new version is published
 
-This directory is home to a couple of development scripts; `bootstrap` and `test`
-they're used to bootstrap the development environment and run tests
-respectively.
+### Setting up a Hubot instance
 
-### src
+See the [hubot docs](https://hubot.github.com/docs/) for info on setting up your own hubot instance.
 
-This directory is home to the actual hubot scripts in the package. Your
-`index.coffee` entry point will load the scripts from this directory.
+To include your local copy of hubot-giphy-gifme in your hubot instance:
 
-### test
+```bash
+mkdir hubot/scripts
+cp hubot-giphy-gifme/src/giphy-gifme.coffee hubot/scripts/giphy-gifme.coffee
+```
 
-This directory is home to any tests you write for your scripts. This example
-package uses Mocha, Chai and Sinon to manage writing tests.
+You can set the additional environment variable `DEBUG` to enable console output:
 
-## Advantages of Building a Package
+`DEBUG=* bin/hubot`
 
-Some of the advantages of building an npm package for your hubot script(s) are:
+## License
 
-* You don't need to rely on when hubot-scripts package is released.
-* You can specify dependencies in the `package.json` rather than have users
-  manually specify them
-* You can easily add tests using your favourite frameworks and libraries
+MIT. See [LICENSE.md](LICENSE.md).
