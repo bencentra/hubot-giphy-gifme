@@ -1,40 +1,76 @@
 # Description:
-# Pulls a random gif (optionally by tag[s]) from Giphy
+# Pulls a random gif (optionally limited by tag[s]) from Giphy
 #
 # Dependencies:
 # none
 #
 # Configuration:
 # process.env.HUBOT_GIPHY_API_KEY = <your giphy API key>
-# process.env.HUBOT_GIPHY_RATING = 'pg' (y,g, pg, pg-13 or r)
+# process.env.HUBOT_GIPHY_RATING = 'pg' (y, g, pg, pg-13 or r)
 #
 # Commands:
-# hubot gif me (tag 1, tag 2) - Get a random gif (tagged with "tag 1" and "tag 2")
+# hubot gif me - Get a completely random GIF
+# hubot gif me tag 1, "tag 2" - Search for a GIF tagged with "tag 1" and "tag 2"
+# hubot giphy - Get a completely random GIF
+# hubot giphy tag 1, "tag 2" - Search for a GIF tagged with "tag 1" and "tag 2"
 #
 # Author:
 # Ben Centra
 
-api_key = process.env.HUBOT_GIPHY_API_KEY or 'dc6zaTOxFJmzC' # <== Giphy's public API key, please request your own!
-rating_limit = process.env.HUBOT_GIPHY_RATING or 'pg'
+# Key for Giphy API
+# Default value is the demo key; please request your own!
+GIPHY_API_KEY = process.env.HUBOT_GIPHY_API_KEY or 'dc6zaTOxFJmzC'
 
-Array::empty = -> @.length == 0
+# Content rating to prevent NSFW responses
+# Possible values: y, g, pg, pg-13 or r
+CONTENT_RATING_LIMIT = process.env.HUBOT_GIPHY_RATING or 'pg'
 
-getRandomGiphyGif = (msg, tags) ->
-  url = "http://api.giphy.com/v1/gifs/random?api_key=#{api_key}&rating=#{rating_limit}"
-  if tags and tags[0] != ''
-    url += '&tag=' + tags[0]
-    for i in [1...tags.length]
-      url += ('+' + tags[i]) if tags[i].length > 0
+# Base URL of Giphy API "random" endpoint
+# API Docs: https://github.com/Giphy/GiphyAPI#random-endpoint
+ENDPOINT_URL_RANDOM = "http://api.giphy.com/v1/gifs/random?api_key=#{GIPHY_API_KEY}&rating=#{CONTENT_RATING_LIMIT}"
+
+# Enable console output for development
+DEBUG = process.env.DEBUG or false
+
+_debug = ->
+  console.log.apply(this, arguments) if DEBUG
+
+_createTagsParam = (tagString) ->
+  ignoredCharactersRegex = /['",]/g
+  whitespaceRegex = /\s/g
+  tagString = tagString.trim()
+  tagString = tagString.replace ignoredCharactersRegex, ''
+  tagString = tagString.replace whitespaceRegex, '+'
+  _debug 'tagString', tagString
+  tagString
+
+_makeApiCall = (msg, url, callback) ->
   msg.http(url).get() (err, res, body) ->
-    response = JSON.parse(body);
-    if response.data.empty()
-      message = "No gifs match your tags :("
+    if err or res.statusCode isnt 200
+      msg.send 'Apologies -- something went wrong looking for your GIF.'
     else
-      message = response.data.image_url
+      response = JSON.parse(body).data
+      _debug 'response', response
+      callback response
 
-    msg.send(message)
+getRandomGif = (msg, tags) ->
+  url = ENDPOINT_URL_RANDOM
+  if tags
+    tagsParam = _createTagsParam tags
+    url += "&tag=#{tagsParam}"
+  _debug 'url', url
+  _makeApiCall msg, url, (response) ->
+    if response.image_url
+     msg.send response.image_url
+    else
+      searchedWithTags = msg.match.length is 1
+      if searchedWithTags
+        msg.send "Apologies -- I couldn't find any GIFs! This is very strange, indeed."
+      else
+        msg.send "Apologies -- I couldn't find any GIFs matching '#{msg.match[1]}'."
 
+# Commands to expose to Hubot
 module.exports = (robot) ->
-  robot.respond /gif me|giphy(.*)/i, (msg) ->
-    tags = msg.match[1].trim().split(', ')
-    getRandomGiphyGif(msg, tags)
+  robot.respond /gif me(.*)|giphy(.*)/i, (msg) ->
+    tags = msg.match[1]
+    getRandomGif msg, tags
