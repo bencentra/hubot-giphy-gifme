@@ -16,10 +16,20 @@ describe 'giphy-gifme', ->
     Giphy = giphyGifmeScript.__get__ 'Giphy'
     giphyGifmeScript @robot
 
-  describe 'listeners', ->
+  describe 'listens', ->
 
-    it 'listens "gif me" command', ->
+    it 'for "gif me" and "giphy" commands', ->
       expect(@robot.respond).toHaveBeenCalledWith /(gif me|giphy)(.*)/i, jasmine.any Function
+
+  describe 'responds', ->
+
+    xit 'to "hubot gif me" command', ->
+
+    xit 'to "hubot gif me <tags>" command', ->
+
+    xit 'to "hubot giphy" command', ->
+
+    xit 'to "hubot giphy <tags>" command', ->
 
   describe '#getRandomGif', ->
 
@@ -31,15 +41,14 @@ describe 'giphy-gifme', ->
         @imageUrl = 'http://giphy.com/example.gif'
 
       it 'gets a random GIF', ->
-        spyOn(Giphy.prototype, 'makeApiCall').and.callFake (msg, @url, cb) =>
+        spyOn(@giphy, 'makeApiCall').and.callFake (msg, @url, cb) =>
           cb image_url: @imageUrl
         @giphy.getRandomGif @msg
-        expect(Giphy.prototype.makeApiCall).toHaveBeenCalled()
+        expect(@giphy.makeApiCall).toHaveBeenCalled()
         expect(@url).toEqual @apiUrl
         expect(@msg.send).toHaveBeenCalledWith @imageUrl
 
       xit 'sends an error if unable to get a GIF', ->
-        # TODO
 
     describe 'with tags', ->
 
@@ -50,12 +59,11 @@ describe 'giphy-gifme', ->
 
       it 'gets a random GIF with tags', ->
 
-        spyOn(Giphy.prototype, 'makeApiCall').and.callFake (msg, @url, cb) =>
+        spyOn(@giphy, 'makeApiCall').and.callFake (msg, @url, cb) =>
           cb image_url: @imageUrl
         @giphy.getRandomGif @msg, 'american psycho'
-        expect(Giphy.prototype.makeApiCall).toHaveBeenCalled()
+        expect(@giphy.makeApiCall).toHaveBeenCalled()
         expect(@url).toEqual @apiUrl
         expect(@msg.send).toHaveBeenCalledWith @imageUrl
 
       xit 'sends an error if unable to get a GIF', ->
-        # TODO
