@@ -4,37 +4,29 @@
   "version": "0.1.6",
   "author": "Ben Centra <blcentra@gmail.com>",
   "license": "MIT",
-
   "keywords": [
     "hubot",
     "hubot-scripts",
     "gif",
     "giphy"
   ],
-
   "repository": {
     "type": "git",
     "url": "git://github.com/bencentra/hubot-giphy-gifme.git"
   },
-
   "bugs": {
     "url": "https://github.com/bencentra/hubot-giphy-gifme/issues"
   },
-
   "dependencies": {
     "coffee-script": "~1.6"
   },
-
   "devDependencies": {
-    "mocha": "*",
-    "chai": "*",
-    "sinon-chai": "*",
-    "sinon": "*"
+    "jasmine-node": "^2.0.0-beta",
+    "rewire": "^2.5.1"
   },
-
   "main": "index.coffee",
-
   "scripts": {
+    "start": "script/bootstrap",
     "test": "script/test"
   }
 }

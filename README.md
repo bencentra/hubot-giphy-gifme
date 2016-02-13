@@ -20,7 +20,7 @@ These will all result in the same search `"american+psycho"`. See the [random en
 
 In your hubot instance, include this script like so:
 
-external-scripts.json:
+external-scripts.json
 ```json
 [
   ...
@@ -45,11 +45,14 @@ You can configure the script with the following environment variables:
 
 ## Contributing
 
-* Fork/clone this project and make your changes
-* Test against a local hubot instance (see below)
-* Submit a PR and badger [bencentra]() until it is merged and a new version is published
+* Fork/clone this project
+* Run bootstrap script (installs dependencies, etc): `npm start`
+* Make and test your changes
+  * Test against a local hubot instance (see below)
+  * Run and update the tests: `npm test`
+* Submit a PR and badger [bencentra](https://github.com/bencentra) until it is merged and a new version is published
 
-### Setting up a Hubot instance
+### Setting Up a Hubot Instance
 
 See the [hubot docs](https://hubot.github.com/docs/) for info on setting up your own hubot instance.
 
