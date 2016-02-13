@@ -1,5 +1,5 @@
 {
-  "name": "lol hubot-giphy-gifme",
+  "name": "lol-hubot-giphy-gifme",
   "description": "Get a random GIF from Giphy! Search by tags! Yeah!",
   "version": "0.1.6",
   "author": "Ben Centra <blcentra@gmail.com>",
