@@ -7,6 +7,7 @@
 # Configuration:
 # process.env.HUBOT_GIPHY_API_KEY = <your giphy API key>
 # process.env.HUBOT_GIPHY_RATING = 'pg' (y, g, pg, pg-13 or r)
+# process.env.HUBOT_GIPHY_FORCE_HTTPS = 'true' (optionally force https URLs)
 #
 # Commands:
 # hubot gif me - Get a completely random GIF
@@ -24,6 +25,9 @@ GIPHY_API_KEY = process.env.HUBOT_GIPHY_API_KEY or 'dc6zaTOxFJmzC'
 # Content rating to prevent NSFW responses
 # Possible values: y, g, pg, pg-13 or r
 CONTENT_RATING_LIMIT = process.env.HUBOT_GIPHY_RATING or 'pg'
+
+# Rewrite URLs to be served over https
+FORCE_HTTPS = process.env.HUBOT_GIPHY_FORCE_HTTPS == 'true' or false
 
 # Base URL of Giphy API "random" endpoint
 # API Docs: https://github.com/Giphy/GiphyAPI#random-endpoint
@@ -68,7 +72,10 @@ class Giphy
     _debug 'url', url
     @makeApiCall msg, url, (response) ->
       if response.image_url
-       msg.send response.image_url
+        if FORCE_HTTPS
+          msg.send response.image_url.replace(/^http:/, "https:")
+        else
+          msg.send response.image_url
       else
         if tags
           msg.send "Apologies -- I couldn't find any GIFs matching '#{tags}'."
