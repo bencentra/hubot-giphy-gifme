@@ -27,7 +27,7 @@ GIPHY_API_KEY = process.env.HUBOT_GIPHY_API_KEY or 'dc6zaTOxFJmzC'
 CONTENT_RATING_LIMIT = process.env.HUBOT_GIPHY_RATING or 'pg'
 
 # Rewrite URLs to be served over https
-FORCE_HTTPS = process.env.HUBOT_GIPHY_FORCE_HTTPS == 'true' or false
+FORCE_HTTPS = (process.env.HUBOT_GIPHY_FORCE_HTTPS is 'true') or false
 
 # Base URL of Giphy API "random" endpoint
 # API Docs: https://github.com/Giphy/GiphyAPI#random-endpoint
@@ -45,6 +45,12 @@ _debug = ->
 class Giphy
 
   constructor: ->
+
+  formatUrl: (url) ->
+    if FORCE_HTTPS
+      httpRegex = /^http:/
+      url = url.replace httpRegex, "https:"
+    url
 
   createTagsParam: (tagString) ->
     ignoredCharactersRegex = /['",]/g
@@ -70,12 +76,9 @@ class Giphy
       tagsParam = @createTagsParam tags
       url += "&tag=#{tagsParam}"
     _debug 'url', url
-    @makeApiCall msg, url, (response) ->
+    @makeApiCall msg, url, (response) =>
       if response.image_url
-        if FORCE_HTTPS
-          msg.send response.image_url.replace(/^http:/, "https:")
-        else
-          msg.send response.image_url
+        msg.send @formatUrl response.image_url
       else
         if tags
           msg.send "Apologies -- I couldn't find any GIFs matching '#{tags}'."

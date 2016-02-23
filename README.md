@@ -32,7 +32,7 @@ package.json
 ```json
 {
   ...
-  dependencies: {
+  "dependencies": {
     ...
     "hubot-giphy-gifme": "^1.0.0"
   }
