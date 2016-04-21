@@ -8,6 +8,7 @@
 # process.env.HUBOT_GIPHY_API_KEY = <your giphy API key>
 # process.env.HUBOT_GIPHY_RATING = 'pg' (y, g, pg, pg-13 or r)
 # process.env.HUBOT_GIPHY_FORCE_HTTPS = 'true' (optionally force https URLs)
+# process.env.HUBOT_GIPHY_INLINE_IMAGES = 'true' (optionally use inline-images formating in Mattermost)
 #
 # Commands:
 # hubot gif me - Get a completely random GIF
@@ -28,6 +29,9 @@ CONTENT_RATING_LIMIT = process.env.HUBOT_GIPHY_RATING or 'pg'
 
 # Rewrite URLs to be served over https
 FORCE_HTTPS = (process.env.HUBOT_GIPHY_FORCE_HTTPS is 'true') or false
+
+# Send url as In-line Image
+INLINE_IMAGES = (process.env.HUBOT_GIPHY_INLINE_IMAGES is 'true') or false
 
 # Base URL of Giphy API "random" endpoint
 # API Docs: https://github.com/Giphy/GiphyAPI#random-endpoint
@@ -78,7 +82,10 @@ class Giphy
     _debug 'url', url
     @makeApiCall msg, url, (response) =>
       if response.image_url
-        msg.send @formatUrl response.image_url
+        if INLINE_IMAGES
+          msg.send '![giphy](' + @formatUrl response.image_url + ')'
+        else
+          msg.send @formatUrl response.image_url
       else
         if tags
           msg.send "Apologies -- I couldn't find any GIFs matching '#{tags}'."
