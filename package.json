@@ -1,7 +1,7 @@
 {
   "name": "hubot-giphy-gifme",
   "description": "Get a random GIF from Giphy! Search by tags! Yeah!",
-  "version": "0.1.8",
+  "version": "0.1.9",
   "author": "Ben Centra <blcentra@gmail.com>",
   "license": "MIT",
   "keywords": [
